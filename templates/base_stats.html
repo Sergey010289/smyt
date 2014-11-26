@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stats</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css">
+
+    <script src="{{ STATIC_URL }}js/jquery-1.10.2.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery-ui.js"></script>
+
+    <script>
+        $(function() {
+            $( "#from" ).datepicker({
+            dateFormat: "yy/mm/dd",
+            onClose: function( selectedDate ) {
+                $( "#to" ).datepicker( "option", "minDate", selectedDate );
+            }
+            });
+        $( "#to" ).datepicker({
+            dateFormat: "yy/mm/dd",
+            onClose: function( selectedDate ) {
+                $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+            }
+            });
+        });
+    </script>
+</head>
+<body>
+    <!--{{ table }}-->
+
+    {% block table %} {% endblock %}
+</body>
+</html>

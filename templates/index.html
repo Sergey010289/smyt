@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title></title>
+    <meta charset="utf-8">
+    {% load staticfiles %}
+
+{#    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css">#}
+{##}
+{#    <script src="{{ STATIC_URL }}js/jquery-1.10.2.js"></script>#}
+{#    <script src="{{ STATIC_URL }}js/jquery-ui.js"></script>#}
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+    <script>
+        $(function() {
+            $( "li").click(function(){
+                $('#data_table').empty();
+                var model = $(this).attr('id');
+                var table_header = $.ajax({
+                    url: '/api/structure/',
+                    type: 'GET',
+                    data: {
+                        model: model
+                    },
+                    success: function (response) {
+                        var obj = $.parseJSON(response);
+                        var row = '<tr>';
+                        for (var i in obj) {
+                            row += '<td>' + obj[i] + '</td>';
+                            {#                    console.log(obj[i]);#}
+                        }
+                        row += '</tr>';
+
+                        $('#data_table').append(row);
+                        table_header = obj;
+                        return obj;
+                    }
+                });
+                $.ajax({
+                    url: '/api/data/',
+                    type: 'GET',
+                    data: {
+                        model: model
+
+                    },
+                    success: function (response) {
+
+                        for (var obj in response){
+                            var row = '<tr>';
+                            for (var i in table_header){
+                                row += '<td>' + response[obj][table_header[i]] + '</td>';
+{#                                row += '<td>' + response[obj][table_header[i].toString()] + '</td>';#}
+                            }
+                            row += '</tr>';
+
+                            $('#data_table').append(row);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <ul>
+        {% for en, ru in models.items %}
+{#            <li id="{{ en }}"><a href="?model={{ en }}">{{ ru }}</a></li>#}
+            <li id="{{ en }}"><a >{{ ru }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <table id="data_table" border="1">
+    </table>
+
+</body>
+</html>
